@@ -2,6 +2,19 @@ import React, { useEffect, useState } from 'react';
 import mapImage from './img/map.svg';
 import './style.css';
 
+const DatesOptions = ({ dates }) => {
+  return (
+    <>
+      <option value="">Vyberte</option>
+      {dates.map((date) => (
+        <option key={date.dateBasic} value={date.dateBasic}>
+          {date.dateCs}
+        </option>
+      ))}
+    </>
+  );
+};
+
 const CityOptions = ({ cities }) => {
   return (
     <>
@@ -21,7 +34,7 @@ export const JourneyPicker = ({ onJourneyChange }) => {
     console.log('Odesílám formulář s cestou');
     console.log(fromCity);
     console.log(toCity);
-    console.log(date);
+    console.log(dates);
   };
 
   useEffect(() => {
@@ -29,15 +42,16 @@ export const JourneyPicker = ({ onJourneyChange }) => {
       .then((resp) => resp.json())
       .then((data) => setCities(data.results));
 
-    /*     fetch('https://apps.kodim.cz/daweb/leviexpress/api/dates')
+    fetch('https://apps.kodim.cz/daweb/leviexpress/api/dates')
       .then((resp) => resp.json())
-      .then((data) => setDate(data.results)); */
+      .then((data) => setDates(data.results));
   }, []);
 
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
-  const [date, setDate] = useState('');
   const [cities, setCities] = useState([]);
+  const [dates, setDates] = useState([]);
+  const [dateByUser, setDateByUser] = useState([]);
 
   return (
     <div className="journey-picker container">
@@ -58,13 +72,8 @@ export const JourneyPicker = ({ onJourneyChange }) => {
           </label>
           <label>
             <div className="journey-picker__label">Datum:</div>
-            <select onChange={(e) => setDate(e.target.value)}>
-              <option value="">Vyberte</option>
-              <option value="datum01">Datum 01</option>
-              <option value="datum02">Datum 02</option>
-              <option value="datum03">Datum 03</option>
-              <option value="datum04">Datum 04</option>
-              <option value="datum05">Datum 05</option>
+            <select onChange={(e) => setDateByUser(e.target.value)}>
+              <DatesOptions dates={dates} />
             </select>
           </label>
           <div className="journey-picker__controls">
