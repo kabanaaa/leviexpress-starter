@@ -7,7 +7,7 @@ const CityOptions = ({ cities }) => {
     <>
       <option value="">Vyberte</option>
       {cities.map((city) => (
-        <option key={city.code} value={city.code}>
+        <option key={city.code} value={city.name}>
           {city.name}
         </option>
       ))}
@@ -24,13 +24,20 @@ export const JourneyPicker = ({ onJourneyChange }) => {
     console.log(date);
   };
 
+  useEffect(() => {
+    fetch('https://apps.kodim.cz/daweb/leviexpress/api/cities')
+      .then((resp) => resp.json())
+      .then((data) => setCities(data.results));
+
+    /*     fetch('https://apps.kodim.cz/daweb/leviexpress/api/dates')
+      .then((resp) => resp.json())
+      .then((data) => setDate(data.results)); */
+  }, []);
+
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
   const [date, setDate] = useState('');
-  const [cities, setCities] = useState([
-    { name: 'Praha', code: 'CZ-PRG' },
-    { name: 'Brno', code: 'CZ-BRQ' },
-  ]);
+  const [cities, setCities] = useState([]);
 
   return (
     <div className="journey-picker container">
